@@ -4,7 +4,7 @@ import User from "../models/user.js";
 const router = express.Router();
 
 router.post("/signup", async (req, res) => {
-  const { fullName, email, password } = req.body;
+  const { username, email, password } = req.body;
 
   try {
     const alreadyExist = await User.findOne({ email });
@@ -15,7 +15,7 @@ router.post("/signup", async (req, res) => {
       });
     }
 
-    const createdUser = await User.create({ fullName, email, password });
+    const createdUser = await User.create({ username, email, password });
 
     return res.status(201).json({
       success: true,
@@ -28,16 +28,17 @@ router.post("/signup", async (req, res) => {
     });
   }
 });
+
 router.post("/signin", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const token = await User.matchPassword(email, password);
+    const {token , user} = await User.matchPassword(email, password);
     return res.json({
       success: true,
       message: "User logged in successfully",
       token,
-      createdUser
+      user
     });
   } catch (error) {
     return res.status(400).json({

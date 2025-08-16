@@ -52,9 +52,11 @@ userSchema.statics.matchPassword = async function (email, password) {
     const userObject = user.toObject();
     delete userObject.password;
     delete userObject.salt;
+    delete userObject.createdAt;
+    delete userObject.updatedAt;
     const token = setUser(userObject);
     if (!token) throw new Error("Incorrect email or password");
-    return token;
+    return { token, user: userObject };
 };
 
 const User = model("user", userSchema);

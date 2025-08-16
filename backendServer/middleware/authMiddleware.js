@@ -1,6 +1,6 @@
 import { getUser } from "../service/auth.js";
 
-export function checkAuthCookie(cookie) {
+export function AuthCookie(cookie) {
     return (req, res, next) => {
         const cookieValue = req.cookies[cookie];
         if (!cookieValue) return next();

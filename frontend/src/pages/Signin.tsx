@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router";
 
 export default function SignInSection({
   refProp,
 }: {
   refProp?: React.RefObject<HTMLElement>;
 }) {
+  const navigate = useNavigate();
   const formRef = useRef<HTMLFormElement>(null);
   const [form, setForm] = useState({
     email: "",
@@ -20,7 +22,7 @@ export default function SignInSection({
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch("/signin", {
+      const res = await fetch("/auth/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -31,15 +33,12 @@ export default function SignInSection({
       if (data.success) {
         useEffect(()=>{
           localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
+          localStorage.setItem("user", JSON.stringify(data.user));
         } , [])
+        navigate("/dashboard");
         
       } else {
         throw new Error(data.message);
-      }
-      if (res.redirected) {
-        window.location.href = res.url;
-        return;
       }
     } catch (err) {
       console.error(err);

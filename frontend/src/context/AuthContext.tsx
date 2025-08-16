@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState} from "react";
 import type { ReactNode } from "react";
 
 interface User {
+  _id: string;
   username : string;
   email: string;
 }
@@ -22,7 +23,6 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
   const [user , setUser] = useState<User | null>(null);
-  // const navigate = useNavigate();
 
   useEffect(()=>{
     const storedToken = localStorage.getItem("token");

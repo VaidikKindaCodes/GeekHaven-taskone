@@ -1,6 +1,8 @@
 import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router";
 
 export default function SignUpSection({ refProp }: { refProp?: React.RefObject<HTMLElement> }) {
+  const navigate = useNavigate();
   const formRef = useRef<HTMLFormElement>(null);
   const [form, setForm] = useState({
     name: "",
@@ -21,7 +23,7 @@ export default function SignUpSection({ refProp }: { refProp?: React.RefObject<H
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          fullName: form.name,
+          username: form.name,
           email: form.email,
           password: form.password,
         }),
@@ -32,7 +34,8 @@ export default function SignUpSection({ refProp }: { refProp?: React.RefObject<H
       if (data && data.success) {
         formRef.current?.reset();
         setForm({ name: "", email: "", password: "" });
-        window.location.href = "/sign-in";
+        navigate("/sign-in");
+        
         return;
       }
       const msg = data?.message || "Unable to sign up. Please try again.";
@@ -62,7 +65,7 @@ export default function SignUpSection({ refProp }: { refProp?: React.RefObject<H
           className="flex flex-col gap-6"
         >
           <label className="flex flex-col gap-2">
-            <span className="text-white font-semibold">Full Name</span>
+            <span className="text-white font-semibold">Username</span>
             <input
               type="text"
               name="name"
@@ -109,7 +112,6 @@ export default function SignUpSection({ refProp }: { refProp?: React.RefObject<H
             {loading ? "Signing up..." : "Sign Up"}
           </button>
         </form>
-
         <p className="text-center text-gray-400 text-sm mt-6">
           Already have an account?{" "}
           <a
