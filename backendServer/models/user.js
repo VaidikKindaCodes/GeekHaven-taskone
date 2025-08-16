@@ -3,7 +3,7 @@ import { setUser } from "../service/auth.js";
 import { createHmac, randomBytes } from "node:crypto";
 
 const userSchema = new Schema({
-    fullName: {
+    username: {
         type: String,
         required: true,
     },

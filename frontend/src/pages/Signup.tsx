@@ -17,9 +17,29 @@ export default function SignUpSection({ refProp }: { refProp?: React.RefObject<H
     e.preventDefault();
     setLoading(true);
     try {
+      const res = await fetch("/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: form.name,
+          email: form.email,
+          password: form.password,
+        }),
+      });
 
+      const data = await res.json().catch(() => ({} as any));
+
+      if (data && data.success) {
+        formRef.current?.reset();
+        setForm({ name: "", email: "", password: "" });
+        window.location.href = "/sign-in";
+        return;
+      }
+      const msg = data?.message || "Unable to sign up. Please try again.";
+      alert(msg);
     } catch (err) {
       console.error(err);
+      alert("Unable to sign up at the moment. Please try again later.");
     } finally {
       setLoading(false);
     }

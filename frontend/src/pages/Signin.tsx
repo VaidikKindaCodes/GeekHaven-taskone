@@ -1,6 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-export default function SignInSection({ refProp }: { refProp?: React.RefObject<HTMLElement> }) {
+export default function SignInSection({
+  refProp,
+}: {
+  refProp?: React.RefObject<HTMLElement>;
+}) {
   const formRef = useRef<HTMLFormElement>(null);
   const [form, setForm] = useState({
     email: "",
@@ -16,9 +20,30 @@ export default function SignInSection({ refProp }: { refProp?: React.RefObject<H
     e.preventDefault();
     setLoading(true);
     try {
+      const res = await fetch("/signin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email: form.email, password: form.password }),
+      });
+      const data = await res.json();
 
+      if (data.success) {
+        useEffect(()=>{
+          localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        } , [])
+        
+      } else {
+        throw new Error(data.message);
+      }
+      if (res.redirected) {
+        window.location.href = res.url;
+        return;
+      }
     } catch (err) {
       console.error(err);
+      alert("An error occurred while signing in.");
     } finally {
       setLoading(false);
     }
@@ -31,10 +56,12 @@ export default function SignInSection({ refProp }: { refProp?: React.RefObject<H
       ref={refProp}
     >
       <div className="w-full max-w-md bg-neutral-800 rounded-2xl shadow-2xl p-8 sm:p-10 border border-indigo-700/30">
-        <h1 className="text-4xl font-extrabold text-center bg-gradient-to-r from-indigo-400 via-blue-500 to-purple-500 bg-clip-text text-transparent mb-2 pb-5" >
+        <h1 className="text-4xl font-extrabold text-center bg-gradient-to-r from-indigo-400 via-blue-500 to-purple-500 bg-clip-text text-transparent mb-2 pb-5">
           Welcome back to Vaidik's Website
         </h1>
-        <p className="text-center text-gray-300 text-lg mb-6">Sign in to continue</p>
+        <p className="text-center text-gray-300 text-lg mb-6">
+          Sign in to continue
+        </p>
         <form
           ref={formRef}
           onSubmit={handleSubmit}
