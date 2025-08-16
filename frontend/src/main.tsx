@@ -10,9 +10,9 @@ import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
-import { AuthProvider } from "./context/AuthContext";
 import App from "./App";
 import Bookmarks from "./pages/Bookmarks";
+import { PrivateRoute } from "./routes/middlware";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -21,13 +21,18 @@ const router = createBrowserRouter(
       <Route
         path="dashboard"
         element={
+           <PrivateRoute>
             <Dashboard />
+           </PrivateRoute>
+            
         }
       />
       <Route
         path="bookmarks"
         element={
-            <Bookmarks/>
+            <PrivateRoute>
+            <Bookmarks />
+           </PrivateRoute>
         }
       />
       <Route
@@ -47,7 +52,5 @@ const router = createBrowserRouter(
 );
 
 createRoot(document.getElementById("root")!).render(
-    <AuthProvider>
       <RouterProvider router={router} />
-    </AuthProvider>
 );

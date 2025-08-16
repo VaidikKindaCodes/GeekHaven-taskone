@@ -35,8 +35,6 @@ export default function SignInSection({
       if (data.success) {
         document.cookie = `token=${data.token}; path=/;`;
         document.cookie = `user=${encodeURIComponent(JSON.stringify(data.user))}; path=/;`;
-        localStorage.setItem("token" , data.token);
-        localStorage.setItem("user" , data.user);
         navigate("/dashboard");
       } else {
         throw new Error(data.message);

@@ -1,9 +1,9 @@
-import React, { createContext, useEffect, useState} from "react";
+import React, { createContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 
 interface User {
   _id: string;
-  username : string;
+  username: string;
   email: string;
 }
 
@@ -20,28 +20,33 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
-  const [user , setUser] = useState<User | null>(null);
+function getCookie(name: string): string | null {
+  const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+  return match ? decodeURIComponent(match[2]) : null;
+}
 
-  useEffect(()=>{
-    const storedToken = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
-    if (storedToken) setToken(storedToken);
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const [token, setToken] = useState<string | null>(getCookie("token"));
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const cookieToken = getCookie("token");
+    const storedUser = getCookie("user");
+    if (cookieToken) setToken(cookieToken);
     if (storedUser) setUser(JSON.parse(storedUser));
-  } , [])
+  }, []);
 
   const logout = () => {
     setToken(null);
     setUser(null);
-    localStorage.removeItem("token");
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     localStorage.removeItem("user");
   };
-  let isAuthenticated = false;
-  if(token) isAuthenticated = true;
+
+  const isAuthenticated = !!token;
 
   return (
-    <AuthContext.Provider value={{ token, user,  logout, isAuthenticated}}>
+    <AuthContext.Provider value={{ token, user, logout, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );
