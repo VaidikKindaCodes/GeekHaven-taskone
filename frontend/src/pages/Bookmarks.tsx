@@ -1,26 +1,21 @@
 import { useState } from "react";
 import { testData } from "../constants";
 
-function Dashboard() {
+function Bookmarks() {
+
     const [currentPage, setCurrentPage] = useState(1);
     const [difficulty, setDifficulty] = useState("All");
     const pageSize = 9;
-    const filteredData =
-        difficulty === "All"
-            ? testData
-            : testData.filter((q) => q.difficulty === difficulty);
-
+    const filteredData =difficulty === "All" ? testData : testData.filter((q) => q.difficulty === difficulty);
     const totalPages = Math.ceil(filteredData.length / pageSize);
     const pageData = filteredData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-    const handleAddToBookmark = async(url : string)=>{
 
-    }
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black flex items-center justify-center py-12 px-6">
             <main className="w-full max-w-6xl">
                 <header className="mb-8 text-center">
-                    <h1 className="text-3xl font-semibold text-white/90">Problem Dashboard</h1>
-                    <p className="mt-2 text-sm text-white/60">Browse curated problems — Solve your favourite problems, sort them as peer your liking.</p>
+                    <h1 className="text-3xl font-semibold text-white/90">Your Bookmarks</h1>
+                    <p className="mt-2 text-sm text-white/60">Solve your favourate problems.</p>
                     <div className="mt-4 flex items-center justify-center gap-3">
                         <label htmlFor="difficulty" className="text-white">Filter by difficulty</label>
                         <select
@@ -65,6 +60,7 @@ function Dashboard() {
                                     {question.title}
                                 </p>
                             </div>
+
                             <div className="flex items-center justify-between">
                                 <span
                                     className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ring-1 ring-white/6
@@ -77,27 +73,6 @@ function Dashboard() {
                                 >
                                     {question.difficulty}
                                 </span>
-                                <button
-                                    className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium ring-1 ring-indigo-400/40 bg-indigo-900/20 text-indigo-200 hover:bg-indigo-800/30 transition focus:outline-none focus:ring-2 focus:ring-indigo-500`}
-                                    onClick={()=> handleAddToBookmark(question.url)}
-                                    title="Add to Bookmark"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="h-4 w-4"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                        strokeWidth={2}
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M5 5v16l7-5 7 5V5a2 2 0 00-2-2H7a2 2 0 00-2 2z"
-                                        />
-                                    </svg>
-                                    Add to Bookmark
-                                </button>
 
                                 <a
                                     href={question.url}
@@ -142,4 +117,4 @@ function Dashboard() {
     );
 }
 
-export default Dashboard;
+export default Bookmarks;

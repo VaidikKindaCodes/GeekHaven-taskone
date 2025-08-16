@@ -39,24 +39,24 @@ userSchema.pre("save", function (next) {
 });
 
 userSchema.statics.matchPassword = async function (email, password) {
-    const user = await this.findOne({ email });
-    if (!user) throw new Error("Incorrect email or password");
+    const User = await this.findOne({ email });
+    if (!User) throw new Error("Incorrect email or password");
 
-    const hashedAttempt = createHmac("sha256", user.salt)
+    const hashedAttempt = createHmac("sha256", User.salt)
         .update(password)
         .digest("hex");
 
-    if (hashedAttempt !== user.password) {
+    if (hashedAttempt !== User.password) {
         throw new Error("Incorrect email or password");
     }
-    const userObject = user.toObject();
-    delete userObject.password;
-    delete userObject.salt;
-    delete userObject.createdAt;
-    delete userObject.updatedAt;
-    const token = setUser(userObject);
+    const user = User.toObject();
+    delete user.password;
+    delete user.salt;
+    delete user.createdAt;
+    delete user.updatedAt;
+    const token = setUser(user);
     if (!token) throw new Error("Incorrect email or password");
-    return { token, user: userObject };
+    return { token, user };
 };
 
 const User = model("user", userSchema);

@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import {
@@ -11,10 +10,9 @@ import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
-import { PrivateRoute } from "./routes/Privateroute";
-import Publicroutes from "./routes/Publicroutes";
 import { AuthProvider } from "./context/AuthContext";
 import App from "./App";
+import Bookmarks from "./pages/Bookmarks";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,25 +21,25 @@ const router = createBrowserRouter(
       <Route
         path="dashboard"
         element={
-          <PrivateRoute>
             <Dashboard />
-          </PrivateRoute>
+        }
+      />
+      <Route
+        path="bookmarks"
+        element={
+            <Bookmarks/>
         }
       />
       <Route
         path="sign-in"
         element={
-          <Publicroutes>
             <Signin />
-          </Publicroutes>
         }
       />
       <Route
         path="sign-up"
         element={
-          <Publicroutes>
             <Signup />
-          </Publicroutes>
         }
       />
     </Route>
@@ -49,9 +47,7 @@ const router = createBrowserRouter(
 );
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
     <AuthProvider>
       <RouterProvider router={router} />
     </AuthProvider>
-  </StrictMode>
 );

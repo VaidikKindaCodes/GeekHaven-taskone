@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {  useRef, useState } from "react";
 import { useNavigate } from "react-router";
 
 export default function SignInSection({
@@ -21,6 +21,7 @@ export default function SignInSection({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
     try {
       const res = await fetch("/auth/signin", {
         method: "POST",
@@ -28,21 +29,21 @@ export default function SignInSection({
         credentials: "include",
         body: JSON.stringify({ email: form.email, password: form.password }),
       });
+
       const data = await res.json();
 
       if (data.success) {
-        useEffect(()=>{
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("user", JSON.stringify(data.user));
-        } , [])
+        document.cookie = `token=${data.token}; path=/;`;
+        document.cookie = `user=${encodeURIComponent(JSON.stringify(data.user))}; path=/;`;
+        localStorage.setItem("token" , data.token);
+        localStorage.setItem("user" , data.user);
         navigate("/dashboard");
-        
       } else {
         throw new Error(data.message);
       }
     } catch (err) {
       console.error(err);
-      alert("An error occurred while signing in.");
+      alert("An error occurred while signing in");
     } finally {
       setLoading(false);
     }
