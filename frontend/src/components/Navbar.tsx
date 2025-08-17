@@ -11,18 +11,30 @@ function Navbar() {
   } , [])
   
   return (
-    <header className="left-0 right-0 top-0 fixed z-10 bg-gray-900 max-w-7xl mx-auto shadow-md">
+    <header className="left-0 right-0 top-0 fixed z-10 bg-gray-900 max-w-screen mx-auto shadow-md">
       <div className="flex justify-between items-center py-4 mx-auto sm:px-10 px-5">
       <Link to="/" className="text-xl font-bold text-white hover:text-gray-300 transition">MyApp</Link>
       {isAuthenticated ? (
         <div className="flex gap-4 items-center">
-        <span className="text-white">Hello, {user?.username || "User"}</span>
-        <button
-          onClick={logout}
-          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition"
-        >
-          Logout
-        </button>
+          <span className="text-white">Hello, {user?.username || "User"}</span>
+          <Link
+            to="/dashboard"
+            className="bg-gray-700 px-2 py-1 rounded-2xl text-white transition hover:bg-gray-800 hover:scale-105"
+          >
+            Dashboard
+          </Link>
+          <Link
+            to="/bookmarks"
+            className="bg-gray-700 px-2 py-1 rounded-2xl text-white transition hover:bg-gray-800 hover:scale-105"
+          >
+            Bookmarks
+          </Link>
+            <button
+            onClick={logout}
+            className="bg-red-700 px-2 py-1 rounded-2xl text-white transition hover:bg-red-600 hover:scale-105"
+            >
+            Logout
+            </button>
         </div>
       ) : (
         <div className="flex gap-4">

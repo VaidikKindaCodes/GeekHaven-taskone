@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { useAuth } from "../hooks/useAuth";
 import type { AuthContextType } from "../context/AuthContext";
 import NotAuthorized from "../pages/NotAuthorized";
@@ -8,7 +8,11 @@ interface PrivateRouteProps {
 }
 
 export const PrivateRoute = ({ children }: PrivateRouteProps) => {
-  const { isAuthenticated } = useAuth() as AuthContextType;
+  const { isAuthenticated, loading } = useAuth() as AuthContextType;
+  console.log(isAuthenticated);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   if (!isAuthenticated) {
     return <NotAuthorized />;

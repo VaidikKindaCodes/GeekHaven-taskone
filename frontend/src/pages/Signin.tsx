@@ -1,11 +1,14 @@
 import React, {  useRef, useState } from "react";
+import type { AuthContextType } from "../context/AuthContext";
 import { useNavigate } from "react-router";
+import { useAuth } from "../hooks/useAuth";
 
 export default function SignInSection({
   refProp,
 }: {
   refProp?: React.RefObject<HTMLElement>;
 }) {
+  const {setUser} = useAuth() as AuthContextType;
   const navigate = useNavigate();
   const formRef = useRef<HTMLFormElement>(null);
   const [form, setForm] = useState({
@@ -34,6 +37,7 @@ export default function SignInSection({
 
       if (data.success) {
         document.cookie = `token=${data.token}; path=/;`;
+        setUser(data.user);
         document.cookie = `user=${encodeURIComponent(JSON.stringify(data.user))}; path=/;`;
         navigate("/dashboard");
       } else {
