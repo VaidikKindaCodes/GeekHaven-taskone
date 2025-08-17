@@ -15,6 +15,11 @@ const userSchema = new Schema({
     salt: {
         type: String,
     },
+    BookmarkQuestions : {
+        type: Array,
+        required: true,
+        default : []
+    },
     password: {
         type: String,
         required: true,

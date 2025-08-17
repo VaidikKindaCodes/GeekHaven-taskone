@@ -3,6 +3,7 @@ dotenv.config();
 import cors from "cors";
 import express from "express";
 import authRouter from "./routes/auth.js";
+import apiRouter from "./routes/api.js";
 import { DBConnect } from "./dbConnect.js";
 import cookieParser from "cookie-parser";
 
@@ -25,6 +26,7 @@ app.get('/', async (req, res) => {
     res.send("hello");
 });
 app.use("/auth", authRouter);
+app.use("/api" , apiRouter)
 
 app.listen(port, () => {
     console.log("server started");

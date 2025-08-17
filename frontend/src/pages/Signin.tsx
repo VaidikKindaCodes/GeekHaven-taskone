@@ -26,7 +26,7 @@ export default function SignInSection({
     setLoading(true);
 
     try {
-      const res = await fetch("/auth/signin", {
+      const res = await fetch("http://localhost:8080/auth/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

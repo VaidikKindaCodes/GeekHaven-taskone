@@ -1,28 +1,31 @@
-import { DBConnect } from "../dbConnect.js"
-import category from "../models/category.js"
-import question from "../models/question.js"
+import { DBConnect } from "../dbConnect.js";
+import category from "../models/category.js";
+import question from "../models/question.js";
 
 const seeder = async () => {
     await DBConnect("mongodb://127.0.0.1:27017/gh");
     try {
-        const res = await fetch("https://test-data-gules.vercel.app/data.json")
-        const data = await res.json()
-        data.data.map(async(sl) => {
+        const res = await fetch("https://test-data-gules.vercel.app/data.json");
+        const data = await res.json();
+
+        for (const sl of data.data) {
             const title = sl.title;
-            const qusid = [];
-            const cat= await category.create({title: title});
-            sl.ques.map(async(q) => {
-                const resu = await question.create({title : q.title , url:q.p1_link});
-                await category.updateOne({_id : cat._id } , {$push : {questions: resu._id}});
+            const questions = await Promise.all(
+                sl.ques.map(async (q) => {
+                    return await question.create({ title: q.title, topic : title,url: q.p1_link });
+                })
+            );
+            await category.create({
+                title: title,
+                questions: questions
             });
-            cat.save();
-        })
+        }
+
         console.log("done");
         return;
-
     } catch (error) {
-        console("hewkjWSBD");
+        console.log(error.message);
     }
-}
+};
 
-seeder()
+seeder();
