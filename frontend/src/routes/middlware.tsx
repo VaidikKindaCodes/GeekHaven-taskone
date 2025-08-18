@@ -9,7 +9,6 @@ interface PrivateRouteProps {
 
 export const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const { isAuthenticated, loading } = useAuth() as AuthContextType;
-  console.log(isAuthenticated);
   if (loading) {
     return <div>Loading...</div>;
   }

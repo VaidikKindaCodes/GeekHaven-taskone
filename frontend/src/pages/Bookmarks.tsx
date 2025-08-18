@@ -11,7 +11,6 @@ interface Question {
 
 function Bookmarks() {
   const { user } = useAuth() as AuthContextType;
-  const [refresh, setRefresh] = useState(false);
   const [bookmarkData, setBookmarkData] = useState<Array<Question>>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [topic, setTopic] = useState("All");
@@ -26,9 +25,6 @@ function Bookmarks() {
     return () => clearTimeout(handler);
   }, [searchTerm]);
 
-  const handleRefresh = () => {
-    setRefresh((prev) => !prev);
-  };
 
   const fetchBookmarkData = async () => {
     const res = await fetch(
@@ -40,7 +36,7 @@ function Bookmarks() {
 
   useEffect(() => {
     fetchBookmarkData();
-  }, [user, refresh]);
+  }, [user]);
 
   const pageSize = 9;
   const filteredData = bookmarkData.filter((q) => {
