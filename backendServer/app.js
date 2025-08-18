@@ -6,13 +6,23 @@ import authRouter from "./routes/auth.js";
 import apiRouter from "./routes/api.js";
 import { DBConnect } from "./dbConnect.js";
 import cookieParser from "cookie-parser";
-
+import rateLimit from "express-rate-limit";
 const port = process.env.PORT || 8080;
 const databaseUrl = process.env.DB_URI.toString();
 
 const app = express();
 DBConnect(databaseUrl);
 
+const authLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000, 
+  max: 20, 
+  message: {
+    success: false,
+    message: "Too many login/register attempts. Please try again later."
+  },
+  standardHeaders: true, 
+  legacyHeaders: false,  
+});
 
 app.use(cors({
   origin: "http://localhost:5173", 
@@ -25,7 +35,7 @@ app.use(cookieParser());
 app.get('/', async (req, res) => {
     res.send("hello");
 });
-app.use("/auth", authRouter);
+app.use("/auth",authLimiter, authRouter);
 app.use("/api" , apiRouter)
 
 app.listen(port, () => {

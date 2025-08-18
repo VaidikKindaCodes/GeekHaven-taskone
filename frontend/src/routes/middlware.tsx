@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from "react";
+import {  type ReactNode } from "react";
 import { useAuth } from "../hooks/useAuth";
 import type { AuthContextType } from "../context/AuthContext";
 import NotAuthorized from "../pages/NotAuthorized";

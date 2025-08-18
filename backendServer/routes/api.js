@@ -44,6 +44,7 @@ router.get("/fetchdata", async (req, res) => {
     });
   }
 });
+
 router.get("/search", async (req, res) => {
   try {
     const { topic } = req.query;
@@ -59,6 +60,18 @@ router.get("/search", async (req, res) => {
     });
   }
 });
+router.get("/sorteddata" , async(req,res)=>{
+  try {
+    const data = await Category.find().populate({
+      path: "questions",
+      options: { sort: { title: 1 } }
+    });
+    return res.json(data);
+    
+  } catch (error) {
+    
+  }
+})
 router.get("/getbookmarkdata", async (req, res) => {
   try {
     const { userId } = req.query;

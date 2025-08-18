@@ -3,7 +3,8 @@ import category from "../models/category.js";
 import question from "../models/question.js";
 
 const seeder = async () => {
-    await DBConnect("mongodb://127.0.0.1:27017/gh");
+    const databaseUrl = process.env.DB_URI.toString();
+    await DBConnect(databaseUrl);
     try {
         const res = await fetch("https://test-data-gules.vercel.app/data.json");
         const data = await res.json();
