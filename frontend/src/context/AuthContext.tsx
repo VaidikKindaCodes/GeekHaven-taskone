@@ -5,6 +5,7 @@ interface User {
   _id: string;
   username: string;
   email: string;
+  SolvedQuestions: [];
   BookmarkQuestions: [];
 }
 
@@ -44,7 +45,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = () => {
     setToken(null);
     setUser(null);
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "token=";
     document.cookie = "user="
     // localStorage.removeItem("user");
   };

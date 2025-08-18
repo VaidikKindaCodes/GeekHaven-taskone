@@ -16,9 +16,11 @@ const userSchema = new Schema(
     salt: {
       type: String,
     },
+    SolvedQuestions: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Question" },
+    ],
     BookmarkQuestions: [
-      { type: mongoose.Schema.Types.ObjectId,
-              ref: 'Question' },
+      { type: mongoose.Schema.Types.ObjectId, ref: "Question" },
     ],
     password: {
       type: String,

@@ -12,14 +12,18 @@ function Navbar() {
 
   useEffect(() => {
     const saved = localStorage.getItem("theme") as "light" | "dark" | null;
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
     const initial = saved ?? (prefersDark ? "dark" : "light");
     setTheme(initial);
     document.documentElement.classList.add(initial);
   }, []);
 
   useEffect(() => {
-    document.documentElement.classList.remove(theme === "light" ? "dark" : "light");
+    document.documentElement.classList.remove(
+      theme === "light" ? "dark" : "light"
+    );
     document.documentElement.classList.add(theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
@@ -37,13 +41,21 @@ function Navbar() {
         <nav className="hidden md:flex gap-4 items-center">
           {isAuthenticated ? (
             <>
-              <span className="text-white">Hello, {user?.username || "User"}</span>
+              <span className="text-white">
+                Hello, {user?.username || "User"}
+              </span>
               {/* <button
                 onClick={() => setTheme(theme === "light" ? "dark" : "light")}
                 className="px-3 py-1 rounded-full shadow bg-gray-200 dark:bg-gray-800 text-black dark:text-white transition text-sm"
               >
                 {theme === "light" ? "Dark 🌙" : "Light ☀️"}
               </button> */}
+              <Link
+                to="/profile"
+                className="bg-gray-700 px-3 py-1 rounded-2xl text-white transition hover:bg-gray-800 hover:scale-105 text-sm"
+              >
+                Profile
+              </Link>
               <Link
                 to="/dashboard"
                 className="bg-gray-700 px-3 py-1 rounded-2xl text-white transition hover:bg-gray-800 hover:scale-105 text-sm"
@@ -94,13 +106,21 @@ function Navbar() {
           <div className="flex flex-col gap-4 p-4">
             {isAuthenticated ? (
               <>
-                <span className="text-white">Hello, {user?.username || "User"}</span>
+                <span className="text-white">
+                  Hello, {user?.username || "User"}
+                </span>
                 {/* <button
                   onClick={() => setTheme(theme === "light" ? "dark" : "light")}
                   className="px-3 py-2 rounded shadow bg-gray-200 dark:bg-gray-800 text-black dark:text-white transition text-sm"
                 >
                   {theme === "light" ? "Dark 🌙" : "Light ☀️"}
                 </button> */}
+                <Link
+                  to="/profile"
+                  className="bg-gray-700 px-3 py-1 rounded-2xl text-white transition hover:bg-gray-800 hover:scale-105 text-sm"
+                >
+                  Profile
+                </Link>
                 <Link
                   to="/dashboard"
                   className="bg-gray-700 px-3 py-2 rounded-lg text-white hover:bg-gray-800"

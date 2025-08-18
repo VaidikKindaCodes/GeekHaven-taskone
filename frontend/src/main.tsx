@@ -13,6 +13,7 @@ import Signup from "./pages/Signup";
 import App from "./App";
 import Bookmarks from "./pages/Bookmarks";
 import { PrivateRoute } from "./routes/middlware";
+import Profile from "./pages/Profile";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -32,6 +33,14 @@ const router = createBrowserRouter(
         element={
             <PrivateRoute>
             <Bookmarks />
+           </PrivateRoute>
+        }
+      />
+      <Route
+        path="profile"
+        element={
+            <PrivateRoute>
+            <Profile />
            </PrivateRoute>
         }
       />

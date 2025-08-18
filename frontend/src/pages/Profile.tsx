@@ -8,16 +8,15 @@ interface Question {
   topic: string;
   url: string;
 }
-
 interface QuestionData {
   _id: string;
   title: string;
   questions: Question[];
 }
-
-function Dashboard() {
+function Profile() {
   const { user, setUser } = useAuth() as AuthContextType;
-  const [questionData, setQuestionData] = useState<QuestionData[]>([]);
+  const [totalData, setTotalData] = useState<QuestionData[]>([]);
+  const [solvedData , setSolvedData] = useState<Question[]>([]);
   const userid = user?._id;
   const [currentPage, setCurrentPage] = useState(1);
   const [topic, setTopic] = useState("All");
@@ -27,6 +26,7 @@ function Dashboard() {
   const [debouncedSearch, setDebouncedSearch] = useState(searchTerm);
 
   const pageSize = 9;
+  const allQuestions = totalData.flatMap((qset) => qset.questions);
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearch(searchTerm);
@@ -36,9 +36,7 @@ function Dashboard() {
     return () => clearTimeout(handler);
   }, [searchTerm]);
 
-  const allQuestions = questionData.flatMap((qset) => qset.questions);
-
-  const filteredData = allQuestions.filter((q) => {
+  const filteredData = solvedData.filter((q) => {
     const matchesTopic = topic === "All" || q.topic === topic;
     const matchesSearch =
       typeof q.title === "string" &&
@@ -74,68 +72,20 @@ function Dashboard() {
       setAddingToBookmarks(false);
     }
   };
-
+  const fetchSolvedData = async () => {
+    const res = await fetch(
+      `http://localhost:8080/api/getsolveddata?userId=${user?._id}`
+    );
+    const data = await res.json();
+    setSolvedData(data);
+  };
   const handleFetchQuestions = async () => {
     const res = await fetch("http://localhost:8080/api/fetchdata");
     const data = await res.json();
-    setQuestionData(data);
+    setTotalData(data);
   };
-  const handleAddToSolved = async (id: string) => {
-    try {
-      const res = await fetch("http://localhost:8080/api/addsolved", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ quesId: id, userId: userid }),
-      });
-      const data = await res.json();
-      if (data && data.success) {
-        setUser((prev) =>
-          prev
-            ? {
-                ...prev,
-                solvedQuestions: [...(prev.SolvedQuestions || []), id],
-              }
-            : prev
-        );
-      } else {
-        alert("Couldn't mark as solved");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleRemoveFromSolved = async (id: string) => {
-    try {
-      const res = await fetch("http://localhost:8080/api/removesolved", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ quesId: id, userId: userid }),
-      });
-      const data = await res.json();
-      if (data && data.success) {
-        setUser((prev) =>
-          prev
-            ? {
-                ...prev,
-                solvedQuestions: prev.SolvedQuestions.filter((q) => q !== id),
-              }
-            : prev
-        );
-      } else {
-        alert("Couldn't remove from solved");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  function isQuestionSolved(questionId: string): boolean {
-    return (user?.SolvedQuestions as string[] | undefined)?.includes(questionId) ?? false;
-  }
-
   useEffect(() => {
+    fetchSolvedData();
     handleFetchQuestions();
   }, []);
 
@@ -144,12 +94,32 @@ function Dashboard() {
       <main className="w-full max-w-6xl">
         <header className="mb-8 text-center px-2">
           <h1 className="text-2xl sm:text-3xl font-semibold text-white/90">
-            Problem Dashboard
+            Welcome to your profile , {user?.username.toUpperCase()}
           </h1>
           <p className="mt-2 text-xs sm:text-sm text-white/60 px-1">
-            Browse curated problems — Solve your favourite problems, sort them
-            as per your liking.
+            See your progress and your solved problems here
           </p>
+        <div className="mt-6 flex flex-col items-center">
+            <div className="w-full max-w-md">
+                <div className="flex justify-between mb-1">
+                    <span className="text-xs text-white/80">Solved: {solvedData.length}</span>
+                    <span className="text-xs text-white/80">Total: {allQuestions.length}</span>
+                </div>
+                <div className="w-full bg-gray-800 rounded-full h-4">
+                    <div
+                        className="bg-indigo-600 h-4 rounded-full transition-all"
+                        style={{
+                            width: `${totalData && solvedData.length ? Math.min(100, (solvedData.length / Number(allQuestions.length)) * 100) : 0}%`,
+                        }}
+                    />
+                </div>
+                <div className="mt-1 text-xs text-white/70 text-center">
+                    {allQuestions.length && solvedData.length
+                        ? `${Math.round((solvedData.length / Number(allQuestions.length)) * 100)}% completed`
+                        : "0% completed"}
+                </div>
+            </div>
+        </div>
           <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-3 w-full">
             <input
               type="text"
@@ -293,22 +263,6 @@ function Dashboard() {
                 >
                   {addingToBookmarks ? "Adding..." : "Bookmark"}
                 </button>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={
-                      isQuestionSolved(question._id)
-                    }
-                    onChange={(e) =>
-                      e.target.checked
-                        ? handleAddToSolved(question._id)
-                        : handleRemoveFromSolved(question._id)
-                    }
-                    className="h-4 w-4 accent-indigo-500 cursor-pointer"
-                  />
-                  <label className="text-xs text-white/80">{isQuestionSolved(question._id) ? "Solved" : "NotSolved"}</label>
-                </div>
-
                 <a
                   href={question.url}
                   target="_blank"
@@ -347,4 +301,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default Profile;
