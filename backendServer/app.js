@@ -29,5 +29,5 @@ app.use("/auth", authRouter);
 app.use("/api" , apiRouter)
 
 app.listen(port, () => {
-    console.log("server started");
+    console.log("server started at port + " + port);
 });

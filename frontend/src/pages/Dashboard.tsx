@@ -226,7 +226,7 @@ interface QuestionData {
 }
 
 function Dashboard() {
-  const { user } = useAuth() as AuthContextType;
+  const { user  , setUser} = useAuth() as AuthContextType;
   const [questionData, setQuestionData] = useState<QuestionData[]>([]);
   const userid = user?._id;
   const [currentPage, setCurrentPage] = useState(1);
@@ -260,6 +260,7 @@ function Dashboard() {
       } else {
         alert("Couldn't add question to bookmarks");
       }
+      setUser(user);
     } catch (error) {
       console.error(error);
     } finally {
