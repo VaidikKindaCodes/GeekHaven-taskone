@@ -115,12 +115,12 @@ export default function SignUpSection({ refProp }: { refProp?: React.RefObject<H
         </form>
         <p className="text-center text-gray-400 text-sm mt-6">
           Already have an account?{" "}
-          <a
-            href="/sign-in"
+          <button
+            onClick={()=> navigate("/sign-in")}
             className="text-indigo-400 hover:text-indigo-300 font-semibold"
           >
             Sign In
-          </a>
+          </button>
         </p>
       </div>
     </section>

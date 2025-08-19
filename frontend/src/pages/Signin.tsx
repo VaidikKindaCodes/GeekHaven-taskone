@@ -106,12 +106,12 @@ export default function SignInSection({
 
         <p className="text-center text-gray-400 text-sm mt-6">
           Don't have an account?{" "}
-          <a
-            href="/sign-up"
+          <button
+            onClick={()=> navigate("/sign-up")}
             className="text-indigo-400 hover:text-indigo-300 font-semibold"
           >
             Sign Up
-          </a>
+          </button>
         </p>
       </div>
     </section>
