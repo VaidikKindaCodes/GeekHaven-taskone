@@ -10,6 +10,7 @@ interface Question {
 }
 
 function Bookmarks() {
+  const backendurl = import.meta.env.VITE_BACKEND_URL;
   const { user } = useAuth() as AuthContextType;
   const [bookmarkData, setBookmarkData] = useState<Array<Question>>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,7 +29,7 @@ function Bookmarks() {
 
   const fetchBookmarkData = async () => {
     const res = await fetch(
-      `http://localhost:8080/api/getbookmarkdata?userId=${user?._id}`
+      `${backendurl}/api/getbookmarkdata?userId=${user?._id}`
     );
     const data = await res.json();
     setBookmarkData(data);

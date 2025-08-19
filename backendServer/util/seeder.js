@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 import { DBConnect } from "../dbConnect.js";
 import category from "../models/category.js";
 import question from "../models/question.js";

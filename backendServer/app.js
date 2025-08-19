@@ -9,6 +9,7 @@ import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 const port = process.env.PORT || 8080;
 const databaseUrl = process.env.DB_URI.toString();
+const frontendUrl = process.env.FRONTEND_URL.toString();
 
 const app = express();
 DBConnect(databaseUrl);
@@ -25,7 +26,7 @@ const authLimiter = rateLimit({
 });
 
 app.use(cors({
-  origin: "http://localhost:5173", 
+  origin: frontendUrl, 
   credentials: true,           
 }));
 app.use(express.json());

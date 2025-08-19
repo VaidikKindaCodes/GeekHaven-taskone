@@ -8,6 +8,7 @@ export default function SignInSection({
 }: {
   refProp?: React.RefObject<HTMLElement>;
 }) {
+  const backendurl = import.meta.env.VITE_BACKEND_URL;
   const {setUser} = useAuth() as AuthContextType;
   const navigate = useNavigate();
   const formRef = useRef<HTMLFormElement>(null);
@@ -26,7 +27,7 @@ export default function SignInSection({
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:8080/auth/signin", {
+      const res = await fetch(`${backendurl}/auth/signin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -41,10 +42,9 @@ export default function SignInSection({
         document.cookie = `user=${encodeURIComponent(JSON.stringify(data.user))}; path=/;`;
         navigate("/dashboard");
       } else {
-        throw new Error(data.message);
+        throw alert(data.message);
       }
     } catch (err) {
-      console.error(err);
       alert("An error occurred while signing in");
     } finally {
       setLoading(false);

@@ -16,6 +16,7 @@ interface QuestionData {
 }
 
 function Dashboard() {
+  const backendurl = import.meta.env.VITE_BACKEND_URL;
   const { user, setUser } = useAuth() as AuthContextType;
   const [questionData, setQuestionData] = useState<QuestionData[]>([]);
   const userid = user?._id;
@@ -55,7 +56,7 @@ function Dashboard() {
   const handleAddToBookmark = async (id: string) => {
     setAddingToBookmarks(true);
     try {
-      const res = await fetch("http://localhost:8080/api/bookmark", {
+      const res = await fetch(`${backendurl}/api/bookmark`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -76,13 +77,13 @@ function Dashboard() {
   };
 
   const handleFetchQuestions = async () => {
-    const res = await fetch("http://localhost:8080/api/fetchdata");
+    const res = await fetch(`${backendurl}/api/fetchdata`);
     const data = await res.json();
     setQuestionData(data);
   };
   const handleAddToSolved = async (id: string) => {
     try {
-      const res = await fetch("http://localhost:8080/api/addsolved", {
+      const res = await fetch(`${backendurl}/api/addsolved`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -108,7 +109,7 @@ function Dashboard() {
 
   const handleRemoveFromSolved = async (id: string) => {
     try {
-      const res = await fetch("http://localhost:8080/api/removesolved", {
+      const res = await fetch(`${backendurl}/api/removesolved`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

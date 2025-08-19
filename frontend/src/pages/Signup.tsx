@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 
 export default function SignUpSection({ refProp }: { refProp?: React.RefObject<HTMLElement> }) {
+  const backendurl = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
   const formRef = useRef<HTMLFormElement>(null);
   const [form, setForm] = useState({
@@ -19,7 +20,7 @@ export default function SignUpSection({ refProp }: { refProp?: React.RefObject<H
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:8080/auth/signup", {
+      const res = await fetch(`${backendurl}/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

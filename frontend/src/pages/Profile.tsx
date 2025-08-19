@@ -14,6 +14,7 @@ interface QuestionData {
   questions: Question[];
 }
 function Profile() {
+  const backendurl = import.meta.env.VITE_BACKEND_URL;
   const { user, setUser } = useAuth() as AuthContextType;
   const [totalData, setTotalData] = useState<QuestionData[]>([]);
   const [solvedData , setSolvedData] = useState<Question[]>([]);
@@ -53,7 +54,7 @@ function Profile() {
   const handleAddToBookmark = async (id: string) => {
     setAddingToBookmarks(true);
     try {
-      const res = await fetch("http://localhost:8080/api/bookmark", {
+      const res = await fetch(`${backendurl}/api/bookmark`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -74,13 +75,13 @@ function Profile() {
   };
   const fetchSolvedData = async () => {
     const res = await fetch(
-      `http://localhost:8080/api/getsolveddata?userId=${user?._id}`
+      `${backendurl}/api/getsolveddata?userId=${user?._id}`
     );
     const data = await res.json();
     setSolvedData(data);
   };
   const handleFetchQuestions = async () => {
-    const res = await fetch("http://localhost:8080/api/fetchdata");
+    const res = await fetch(`${backendurl}/api/fetchdata`);
     const data = await res.json();
     setTotalData(data);
   };
