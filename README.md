@@ -37,3 +37,14 @@ GET /api/getbookmarkdata?userId={userId}
 
 GET /api/getsolveddata?userId={userId}
 → fetches user’s solved questions
+
+📌 Auth Routes
+
+POST /api/auth/signup
+{ body: { username, email, password } } → registers a new user
+
+POST /api/auth/signin
+{ body: { email, password } } → logs in a user and returns a token + user details
+
+GET /api/auth/logout
+→ logs out the user (clears session on client side)
